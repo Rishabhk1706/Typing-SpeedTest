@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Typing Test</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+            margin: 0;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 50%;
+        }
+        h1 {
+            margin-bottom: 10px;
+        }
+        p {
+            font-size: 18px;
+        }
+        textarea {
+            width: 100%;
+            height: 100px;
+            margin-top: 10px;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            resize: none;
+        }
+        button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Typing Speed Test</h1>
+        <p id="text"></p>
+        <textarea id="input" placeholder="Start typing here..." oninput="checkTyping()"></textarea>
+        <p id="results">Speed: 0 WPM | Accuracy: 100%</p>
+        <button onclick="restartTest()">Restart</button>
+    </div>
+    
+    <script>
+        let startTime;
+        let phrases = [
+            "The quick brown fox jumps over the lazy dog.",
+            "Typing fast requires practice and patience.",
+            "JavaScript is a powerful language for web development.",
+            "Coding challenges help improve problem-solving skills.",
+            "A journey of a thousand miles begins with a single step."
+        ];
+        
+        function getRandomPhrase() {
+            return phrases[Math.floor(Math.random() * phrases.length)];
+        }
+        
+        let sampleText = getRandomPhrase();
+        document.getElementById("text").innerText = sampleText;
+        let inputField = document.getElementById("input");
+        let resultsField = document.getElementById("results");
+        
+        function checkTyping() {
+            let inputText = inputField.value;
+            if (inputText.length === 1 && !startTime) {
+                startTime = new Date();
+            }
+            
+            let correctChars = 0;
+            for (let i = 0; i < inputText.length; i++) {
+                if (inputText[i] === sampleText[i]) {
+                    correctChars++;
+                }
+            }
+            let accuracy = ((correctChars / inputText.length) * 100).toFixed(2);
+            if (isNaN(accuracy)) accuracy = 100;
+            
+            let timeElapsed = (new Date() - startTime) / 1000 / 60; // in minutes
+            let wordsTyped = inputText.split(" ").length;
+            let wpm = Math.round(wordsTyped / timeElapsed);
+            if (isNaN(wpm) || !isFinite(wpm)) wpm = 0;
+            
+            resultsField.innerText = `Speed: ${wpm} WPM | Accuracy: ${accuracy}%`;
+        }
+        
+        function restartTest() {
+            sampleText = getRandomPhrase();
+            document.getElementById("text").innerText = sampleText;
+            inputField.value = "";
+            resultsField.innerText = "Speed: 0 WPM | Accuracy: 100%";
+            startTime = null;
+        }
+    </script>
+</body>
+</html>
